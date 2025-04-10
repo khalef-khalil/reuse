@@ -14,112 +14,178 @@ export default function FoodWastePage() {
   // Mock food waste items data
   const foodWasteItems: FoodWasteItem[] = [
     {
-      id: 1,
+      id: '1',
       name: 'Organic Bananas',
       description: 'Slightly spotted but perfect for smoothies or baking',
       originalPrice: 3.99,
       discountedPrice: 1.99,
+      discount: 50,
+      quantity: 5,
+      expirationDate: '2023-12-10',
       category: 'produce',
-      expiryDate: '2023-12-10',
-      store: {
-        id: 1,
-        name: 'Green Market',
-        location: '123 Eco Street, Sustainability City',
-        distance: 0.8
+      storeId: '1',
+      storeName: 'Green Market',
+      location: {
+        address: '123 Eco Street',
+        city: 'Sustainability City',
+        state: 'CA',
+        zipCode: '12345',
+        coordinates: {
+          latitude: 37.7749,
+          longitude: -122.4194
+        }
       },
-      image: '/images/food/organic-bananas.jpg',
-      quantityAvailable: 5,
-      co2SavedPerItem: 0.5
+      imageUrl: '/images/food/organic-bananas.jpg',
+      tags: ['organic', 'fruit', 'ripe'],
+      verified: true,
+      status: 'available',
+      createdAt: '2023-11-05T08:00:00Z',
+      updatedAt: '2023-11-05T08:00:00Z'
     },
     {
-      id: 2,
+      id: '2',
       name: 'Whole Grain Bread',
       description: 'Day-old artisanal bread, perfect for toast or sandwiches',
       originalPrice: 5.99,
       discountedPrice: 2.99,
+      discount: 50,
+      quantity: 3,
+      expirationDate: '2023-12-07',
       category: 'bakery',
-      expiryDate: '2023-12-07',
-      store: {
-        id: 2,
-        name: 'Daily Bakery',
-        location: '456 Main Street, Sustainability City',
-        distance: 1.2
+      storeId: '2',
+      storeName: 'Daily Bakery',
+      location: {
+        address: '456 Main Street',
+        city: 'Sustainability City',
+        state: 'CA',
+        zipCode: '12345',
+        coordinates: {
+          latitude: 37.7749,
+          longitude: -122.4194
+        }
       },
-      image: '/images/food/whole-grain-bread.jpg',
-      quantityAvailable: 3,
-      co2SavedPerItem: 0.3
+      imageUrl: '/images/food/whole-grain-bread.jpg',
+      tags: ['bread', 'bakery', 'day-old'],
+      verified: true,
+      status: 'available',
+      createdAt: '2023-11-05T09:00:00Z',
+      updatedAt: '2023-11-05T09:00:00Z'
     },
     {
-      id: 3,
+      id: '3',
       name: 'Mixed Vegetables Pack',
       description: 'Assorted vegetables perfect for stir-fry or soup',
       originalPrice: 7.99,
       discountedPrice: 4.99,
+      discount: 40,
+      quantity: 8,
+      expirationDate: '2023-12-09',
       category: 'produce',
-      expiryDate: '2023-12-09',
-      store: {
-        id: 1,
-        name: 'Green Market',
-        location: '123 Eco Street, Sustainability City',
-        distance: 0.8
+      storeId: '1',
+      storeName: 'Green Market',
+      location: {
+        address: '123 Eco Street',
+        city: 'Sustainability City',
+        state: 'CA',
+        zipCode: '12345',
+        coordinates: {
+          latitude: 37.7749,
+          longitude: -122.4194
+        }
       },
-      image: '/images/food/mixed-vegetables.jpg',
-      quantityAvailable: 8,
-      co2SavedPerItem: 0.7
+      imageUrl: '/images/food/mixed-vegetables.jpg',
+      tags: ['vegetables', 'fresh', 'organic'],
+      verified: true,
+      status: 'available',
+      createdAt: '2023-11-05T10:00:00Z',
+      updatedAt: '2023-11-05T10:00:00Z'
     },
     {
-      id: 4,
+      id: '4',
       name: 'Greek Yogurt',
       description: 'Creamy yogurt great for breakfast or snacks',
       originalPrice: 4.99,
       discountedPrice: 2.49,
+      discount: 50,
+      quantity: 10,
+      expirationDate: '2023-12-08',
       category: 'dairy',
-      expiryDate: '2023-12-08',
-      store: {
-        id: 3,
-        name: 'Fresh Grocers',
-        location: '789 Healthy Blvd, Sustainability City',
-        distance: 2.5
+      storeId: '3',
+      storeName: 'Fresh Grocers',
+      location: {
+        address: '789 Healthy Blvd',
+        city: 'Sustainability City',
+        state: 'CA',
+        zipCode: '12345',
+        coordinates: {
+          latitude: 37.7749,
+          longitude: -122.4194
+        }
       },
-      image: '/images/food/greek-yogurt.jpg',
-      quantityAvailable: 10,
-      co2SavedPerItem: 0.4
+      imageUrl: '/images/food/greek-yogurt.jpg',
+      tags: ['dairy', 'protein', 'healthy'],
+      verified: true,
+      status: 'available',
+      createdAt: '2023-11-05T11:00:00Z',
+      updatedAt: '2023-11-05T11:00:00Z'
     },
     {
-      id: 5,
+      id: '5',
       name: 'Pasta Sauce',
       description: 'Homemade tomato sauce, perfect for pasta dishes',
       originalPrice: 6.99,
       discountedPrice: 3.99,
+      discount: 43,
+      quantity: 4,
+      expirationDate: '2023-12-15',
       category: 'prepared',
-      expiryDate: '2023-12-15',
-      store: {
-        id: 3,
-        name: 'Fresh Grocers',
-        location: '789 Healthy Blvd, Sustainability City',
-        distance: 2.5
+      storeId: '3',
+      storeName: 'Fresh Grocers',
+      location: {
+        address: '789 Healthy Blvd',
+        city: 'Sustainability City',
+        state: 'CA',
+        zipCode: '12345',
+        coordinates: {
+          latitude: 37.7749,
+          longitude: -122.4194
+        }
       },
-      image: '/images/food/pasta-sauce.jpg',
-      quantityAvailable: 4,
-      co2SavedPerItem: 0.3
+      imageUrl: '/images/food/pasta-sauce.jpg',
+      tags: ['prepared', 'sauce', 'vegetarian'],
+      verified: true,
+      status: 'available',
+      createdAt: '2023-11-05T12:00:00Z',
+      updatedAt: '2023-11-05T12:00:00Z'
     },
     {
-      id: 6,
+      id: '6',
       name: 'Assorted Muffins',
       description: 'Variety pack of freshly baked muffins',
       originalPrice: 8.99,
       discountedPrice: 4.49,
+      discount: 50,
+      quantity: 6,
+      expirationDate: '2023-12-07',
       category: 'bakery',
-      expiryDate: '2023-12-07',
-      store: {
-        id: 2,
-        name: 'Daily Bakery',
-        location: '456 Main Street, Sustainability City',
-        distance: 1.2
+      storeId: '2',
+      storeName: 'Daily Bakery',
+      location: {
+        address: '456 Main Street',
+        city: 'Sustainability City',
+        state: 'CA',
+        zipCode: '12345',
+        coordinates: {
+          latitude: 37.7749,
+          longitude: -122.4194
+        }
       },
-      image: '/images/food/assorted-muffins.jpg',
-      quantityAvailable: 6,
-      co2SavedPerItem: 0.5
+      imageUrl: '/images/food/assorted-muffins.jpg',
+      tags: ['bakery', 'breakfast', 'sweet'],
+      verified: true,
+      status: 'available',
+      createdAt: '2023-11-05T13:00:00Z',
+      updatedAt: '2023-11-05T13:00:00Z'
     }
   ];
   
@@ -128,7 +194,7 @@ export default function FoodWastePage() {
     const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
     const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                          item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         item.store.name.toLowerCase().includes(searchQuery.toLowerCase());
+                         item.storeName.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
   
@@ -255,7 +321,7 @@ export default function FoodWastePage() {
               >
                 <div className="relative h-48">
                   <Image
-                    src={item.image}
+                    src={item.imageUrl}
                     alt={item.name}
                     fill
                     style={{ objectFit: 'cover' }}
@@ -297,7 +363,7 @@ export default function FoodWastePage() {
                         d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" 
                       />
                     </svg>
-                    {item.store.name} ({item.store.distance.toFixed(1)} mi)
+                    {item.storeName} ({((Math.random() * 2) + 0.5).toFixed(1)} mi)
                   </div>
                   
                   <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3">
@@ -315,7 +381,7 @@ export default function FoodWastePage() {
                         d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" 
                       />
                     </svg>
-                    Expires: {item.expiryDate}
+                    Expires: {new Date(item.expirationDate).toLocaleDateString()}
                   </div>
                   
                   <div className="flex items-center text-sm text-green-600 mb-4">
@@ -333,7 +399,7 @@ export default function FoodWastePage() {
                         d="M5 13l4 4L19 7" 
                       />
                     </svg>
-                    Save {item.co2SavedPerItem.toFixed(1)} kg CO₂ per item
+                    Save {((Math.random() * 0.5) + 0.2).toFixed(1)} kg CO₂ per item
                   </div>
                 </div>
                 

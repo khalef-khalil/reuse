@@ -71,6 +71,7 @@ const allListings = [
     businessId: 'b1',
     businessName: 'EcoTech Solutions',
     verified: true,
+    transactionVerified: true,
   },
   {
     id: 'p2',
@@ -86,6 +87,7 @@ const allListings = [
     businessId: 'b1',
     businessName: 'EcoTech Solutions',
     verified: true,
+    transactionVerified: true,
   },
   {
     id: 'p3',
@@ -101,6 +103,7 @@ const allListings = [
     businessId: 'b3',
     businessName: 'Sustainable Furnishings',
     verified: false,
+    transactionVerified: false,
   },
   {
     id: 'p4',
@@ -116,6 +119,7 @@ const allListings = [
     businessId: 'b2',
     businessName: 'GreenOffice Supplies',
     verified: true,
+    transactionVerified: true,
   },
   {
     id: 'p5',
@@ -131,6 +135,7 @@ const allListings = [
     businessId: 'b2',
     businessName: 'GreenOffice Supplies',
     verified: true,
+    transactionVerified: true,
   },
   {
     id: 'p6',
@@ -146,6 +151,7 @@ const allListings = [
     businessId: 'b4',
     businessName: 'Circular Tech',
     verified: true,
+    transactionVerified: true,
   },
   {
     id: 'p7',
@@ -161,6 +167,7 @@ const allListings = [
     businessId: 'b3',
     businessName: 'Sustainable Furnishings',
     verified: false,
+    transactionVerified: false,
   },
   {
     id: 'p8',
@@ -176,6 +183,7 @@ const allListings = [
     businessId: 'b4',
     businessName: 'Circular Tech',
     verified: true,
+    transactionVerified: true,
   },
 ];
 
