@@ -211,7 +211,7 @@ export default function CheckoutPage() {
                 <h2 className="text-xl font-semibold mb-4">Pickup Details</h2>
                 <div className="flex justify-center mb-6">
                   <div className="p-4 border border-gray-300 rounded inline-block">
-                    <img src="https://via.placeholder.com/180x180?text=QR+CODE" alt="QR Code" className="w-40 h-40" />
+                    <img src="/images/qr/food-pickup-qr.png" alt="QR Code" className="w-40 h-40" />
                   </div>
                 </div>
                 <div className="text-left mb-4">
