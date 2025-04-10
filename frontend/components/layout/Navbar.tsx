@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [hasUnreadMessages] = useState(true); // In a real app, this would come from a context or API
 
   const navItemVariants = {
     hover: { 
@@ -60,6 +61,26 @@ export default function Navbar() {
                 About
               </Link>
             </motion.div>
+            
+            {/* Messages Link with notification dot */}
+            <motion.div
+              whileHover="hover"
+              variants={navItemVariants}
+              className="relative"
+            >
+              <Link href="/messages" className="hover:text-primary transition-colors flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
+                Messages
+                {hasUnreadMessages && (
+                  <span className="absolute -top-1 -right-2 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                    <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  </span>
+                )}
+              </Link>
+            </motion.div>
+            
             <motion.div 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -131,6 +152,26 @@ export default function Navbar() {
                 About
               </Link>
             </motion.div>
+            
+            {/* Mobile Messages Link */}
+            <motion.div 
+              whileHover={{ x: 5 }}
+              transition={{ duration: 0.2 }}
+              className="relative"
+            >
+              <Link href="/messages" className="block hover:text-primary transition-colors flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
+                Messages
+                {hasUnreadMessages && (
+                  <span className="ml-2 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center">
+                    <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  </span>
+                )}
+              </Link>
+            </motion.div>
+            
             <motion.div 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

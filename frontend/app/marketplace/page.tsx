@@ -188,6 +188,24 @@ export default function Marketplace() {
   const [filteredListings, setFilteredListings] = useState(allListings);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
+  // Convert array categories to objects with value and label
+  const categoryOptions = [
+    { value: 'All Categories', label: 'All Categories' },
+    ...categories.filter(cat => cat !== 'All Categories').map(cat => ({ value: cat, label: cat }))
+  ];
+
+  // Convert array conditions to objects with value and label
+  const conditionOptions = [
+    { value: 'All Conditions', label: 'All Conditions' },
+    ...conditions.filter(cond => cond !== 'All Conditions').map(cond => ({ value: cond, label: cond }))
+  ];
+
+  // Convert array businesses to objects with value and label
+  const businessOptions = [
+    { value: 'All Businesses', label: 'All Businesses' },
+    ...businesses.map(business => ({ value: business.name, label: business.name }))
+  ];
+
   // Filter listings based on selected filters
   useEffect(() => {
     let results = [...allListings];
@@ -224,6 +242,15 @@ export default function Marketplace() {
 
     setFilteredListings(results);
   }, [searchTerm, selectedCategory, selectedCondition, selectedBusiness, priceRange]);
+
+  // Reset all filters
+  const handleResetFilters = () => {
+    setSearchTerm('');
+    setSelectedCategory('All Categories');
+    setSelectedCondition('All Conditions');
+    setSelectedBusiness('All Businesses');
+    setPriceRange({ min: 0, max: 5000 });
+  };
 
   const pageVariants = {
     initial: { opacity: 0 },
@@ -530,100 +557,180 @@ export default function Marketplace() {
               </AnimatePresence>
             </motion.div>
 
-            {/* Results Count and Sort */}
-            <motion.div 
-              className="flex justify-between items-center mb-6"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <div>
-                <span className="font-medium">{filteredListings.length}</span> products found
+            {/* Search */}
+            <div className="mb-6">
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search for products, equipment, or materials..."
+                  className="w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
               </div>
-              <div className="flex items-center">
-                <span className="mr-2">Sort by:</span>
-                <select className="p-1 border rounded focus:ring-2 focus:ring-primary focus:border-transparent">
-                  <option value="newest">Newest</option>
-                  <option value="price-asc">Price: Low to High</option>
-                  <option value="price-desc">Price: High to Low</option>
-                </select>
-              </div>
-            </motion.div>
-
-            {/* Product Grid */}
-            {filteredListings.length > 0 ? (
-              <motion.div 
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                variants={staggerContainer}
-                initial="hidden"
-                animate="visible"
-              >
-                {filteredListings.map((listing) => (
-                  <motion.div
-                    key={listing.id}
-                    variants={cardVariants}
-                    whileHover="hover"
-                    className="bg-white dark:bg-neutral-dark rounded-lg shadow-md overflow-hidden"
-                  >
-                    <div className="h-40 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                      <div className="text-gray-400">Product Image</div>
-                    </div>
-                    <div className="p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm text-gray-500">{listing.category}</span>
-                        <span className="text-sm px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded">
-                          {listing.condition}
-                        </span>
-                      </div>
-                      <h3 className="font-semibold text-lg mb-1">{listing.title}</h3>
-                      <p className="text-primary font-bold mb-2">${listing.price}</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
-                        {listing.description}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <span className="text-xs text-gray-500">{listing.businessName}</span>
-                          {listing.verified && (
-                            <svg className="w-3 h-3 ml-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                            </svg>
-                          )}
-                        </div>
-                        <Link href={`/marketplace/${listing.id}`}>
-                          <Button size="sm">Details</Button>
-                        </Link>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            ) : (
-              <motion.div 
-                className="text-center py-12 bg-white dark:bg-neutral-dark rounded-lg shadow-md"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
-              >
-                <svg className="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h3 className="text-xl font-semibold mb-2">No products found</h3>
-                <p className="text-gray-500 dark:text-gray-400 mb-4">
-                  Try adjusting your search or filter criteria
+            </div>
+            
+            {/* Results Info */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+              <div className="mb-2 md:mb-0">
+                <p className="text-gray-600 dark:text-gray-400">
+                  Showing {filteredListings.length} {filteredListings.length === 1 ? 'result' : 'results'}
                 </p>
-                <Button 
-                  variant="outline" 
-                  onClick={() => {
-                    setSearchTerm('');
-                    setSelectedCategory('All Categories');
-                    setSelectedCondition('All Conditions');
-                    setSelectedBusiness('All Businesses');
-                    setPriceRange({ min: 0, max: 5000 });
+              </div>
+              <div className="w-full md:w-auto">
+                <select
+                  className="w-full md:w-auto px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  onChange={e => {
+                    const sort = e.target.value;
+                    // Sort logic here
+                    setFilteredListings(prevListings => {
+                      const sorted = [...prevListings];
+                      if (sort === 'price-low') {
+                        sorted.sort((a, b) => a.price - b.price);
+                      } else if (sort === 'price-high') {
+                        sorted.sort((a, b) => b.price - a.price);
+                      } else if (sort === 'date-new') {
+                        sorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+                      } else if (sort === 'date-old') {
+                        sorted.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+                      }
+                      return sorted;
+                    });
                   }}
                 >
+                  <option value="">Sort by</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="date-new">Date: Newest First</option>
+                  <option value="date-old">Date: Oldest First</option>
+                </select>
+              </div>
+            </div>
+
+            {/* No Results */}
+            {filteredListings.length === 0 && (
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white dark:bg-neutral-dark rounded-lg shadow-md p-8 text-center my-8"
+              >
+                <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-full mx-auto flex items-center justify-center mb-4">
+                  <svg className="w-10 h-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold mb-2">No listings found</h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-6">
+                  We couldn't find any listings matching your search criteria.
+                </p>
+                <Button onClick={handleResetFilters}>
                   Reset Filters
                 </Button>
               </motion.div>
+            )}
+
+            {/* Listings Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <AnimatePresence>
+                {filteredListings.map((item, index) => (
+                  <motion.div
+                    key={item.id}
+                    custom={index}
+                    variants={cardVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    whileHover="hover"
+                    className="bg-white dark:bg-neutral-dark rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700"
+                    layout
+                  >
+                    <Link href={`/marketplace/${item.id}`} className="block">
+                      <div className="h-48 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                        <span className="text-gray-400">Product Image</span>
+                      </div>
+                      
+                      <div className="p-5">
+                        <div className="flex justify-between items-start mb-2">
+                          <h3 className="font-bold text-lg truncate pr-2">{item.title}</h3>
+                          {item.transactionVerified && (
+                            <div className="flex-shrink-0 bg-green-100 rounded-full p-1" title="Blockchain Verified">
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-600" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
+                        
+                        <p className="text-2xl font-bold text-primary mb-3">${item.price}</p>
+                        
+                        <div className="flex flex-wrap gap-1 mb-3">
+                          <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-xs">
+                            {item.category}
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-xs">
+                            {item.condition}
+                          </span>
+                          <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-xs">
+                            {item.quantity} available
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-center justify-between mt-4">
+                          <div className="flex items-center">
+                            <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mr-2">
+                              <span className="text-gray-500 dark:text-gray-400">{item.businessName.charAt(0)}</span>
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium flex items-center">
+                                {item.businessName}
+                                {item.verified && (
+                                  <svg className="ml-1 w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                  </svg>
+                                )}
+                              </p>
+                              <p className="text-xs text-gray-500">{item.location}</p>
+                            </div>
+                          </div>
+                          <span className="text-xs text-gray-500">{new Date(item.createdAt).toLocaleDateString()}</span>
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+            
+            {/* Pagination */}
+            {filteredListings.length > 0 && (
+              <div className="flex justify-center mt-12">
+                <nav className="flex items-center space-x-2">
+                  <button className="px-3 py-2 rounded-md border border-gray-300 text-gray-500 hover:bg-gray-50">
+                    Previous
+                  </button>
+                  <button className="px-3 py-2 rounded-md bg-primary text-white">
+                    1
+                  </button>
+                  <button className="px-3 py-2 rounded-md border border-gray-300 text-gray-500 hover:bg-gray-50">
+                    2
+                  </button>
+                  <button className="px-3 py-2 rounded-md border border-gray-300 text-gray-500 hover:bg-gray-50">
+                    3
+                  </button>
+                  <span className="px-2 text-gray-500">...</span>
+                  <button className="px-3 py-2 rounded-md border border-gray-300 text-gray-500 hover:bg-gray-50">
+                    10
+                  </button>
+                  <button className="px-3 py-2 rounded-md border border-gray-300 text-gray-500 hover:bg-gray-50">
+                    Next
+                  </button>
+                </nav>
+              </div>
             )}
           </div>
         </div>

@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { useParams, useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import MainLayout from '../../../components/layout/MainLayout';
 import Button from '../../../components/ui/Button';
+import MessageModal from '../../../components/ui/MessageModal';
+import TransactionVerification from './TransactionVerification';
 
 // Mock listings data (same as in marketplace page)
 const allListings = [
@@ -17,6 +19,7 @@ const allListings = [
     condition: 'Good',
     category: 'Furniture',
     location: 'Nairobi, Kenya',
+    tags: ['Office', 'Furniture', 'Wood', 'Sustainable'],
     quantity: 4,
     description: 'Slightly used office desks in good condition. Selling due to office downsizing. These are high-quality desks made from sustainable materials with adjustable height features. Perfect for a growing business or startup office space.',
     createdAt: '2023-10-15',
@@ -34,6 +37,8 @@ const allListings = [
     businessContact: 'info@ecotech.com',
     businessPhone: '+254 123 456 789',
     verified: true,
+    transactionVerified: true,
+    transactionHash: '0x8f6d3d5e9bb4d44a7bdeaaa718326a4c9aee37a1dda0a3e0c0e9e7b061b4c1a3'
   },
   {
     id: 'p2',
@@ -43,6 +48,7 @@ const allListings = [
     condition: 'Excellent',
     category: 'Electronics',
     location: 'Nairobi, Kenya',
+    tags: ['Computers', 'Dell', 'Office', 'Refurbished'],
     quantity: 8,
     description: 'Dell OptiPlex 7080 desktops, 3 years old but in excellent condition with i7 processors. These workstations are perfect for office use, design work, or software development. All units have been professionally refurbished and tested. Selling as a batch or individually.',
     createdAt: '2023-11-20',
@@ -61,6 +67,8 @@ const allListings = [
     businessContact: 'info@ecotech.com',
     businessPhone: '+254 123 456 789',
     verified: true,
+    transactionVerified: true,
+    transactionHash: '0x7e6d3d5e9bb4d44a7bdeaaa718326a4c9aee37a1dda0a3e0c0e9e7b061b4c2b2'
   },
   {
     id: 'p3',
@@ -70,6 +78,7 @@ const allListings = [
     condition: 'Fair',
     category: 'Furniture',
     location: 'Mombasa, Kenya',
+    tags: ['Chairs', 'Office', 'Ergonomic', 'Conference'],
     quantity: 12,
     description: 'Ergonomic conference room chairs. Some wear but still functional. These are high-quality ergonomic chairs from Herman Miller, designed for comfort during long meetings. They feature adjustable height, lumbar support, and armrests.',
     createdAt: '2023-12-05',
@@ -87,21 +96,69 @@ const allListings = [
     businessContact: 'contact@sustainablefurnishings.com',
     businessPhone: '+254 987 654 321',
     verified: false,
+    transactionVerified: false,
+    transactionHash: ''
+  },
+  {
+    id: 'p4',
+    title: 'HP Color LaserJet Printer',
+    image: '/images/placeholder.png',
+    price: 350,
+    condition: 'Good',
+    category: 'Electronics',
+    location: 'Nairobi, Kenya',
+    tags: ['Printer', 'Office', 'HP', 'Color'],
+    quantity: 1,
+    description: 'HP Color LaserJet Pro MFP. Works perfectly, selling because we upgraded to a newer model.',
+    createdAt: '2024-01-10',
+    specifications: [
+      { name: 'Brand', value: 'HP' },
+      { name: 'Model', value: 'Color LaserJet Pro MFP M477fdw' },
+      { name: 'Functions', value: 'Print, Scan, Copy, Fax' },
+      { name: 'Connectivity', value: 'USB, Ethernet, WiFi' },
+      { name: 'Pages Printed', value: 'Approximately 15,000' },
+      { name: 'Age', value: '3 years' },
+    ],
+    businessId: 'b2',
+    businessName: 'GreenOffice Supplies',
+    businessDescription: 'Provider of eco-friendly office supplies and equipment.',
+    businessContact: 'sales@greenoffice.co.ke',
+    businessPhone: '+254 111 222 333',
+    verified: true,
+    transactionVerified: true,
+    transactionHash: '0x5f6d3d5e9bb4d44a7bdeaaa718326a4c9aee37a1dda0a3e0c0e9e7b061b4c3c1'
   },
 ];
 
 export default function ProductDetail() {
   const { id } = useParams();
-  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
+  const router = useRouter();
+  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [relatedProducts, setRelatedProducts] = useState<typeof allListings>([]);
+  const [isWishlisted, setIsWishlisted] = useState(false);
 
   // Find the product based on the ID from the URL
   const product = allListings.find(item => item.id === id);
+
+  // Find related products based on category and tags
+  useEffect(() => {
+    if (product) {
+      const filtered = allListings.filter(item => 
+        item.id !== product.id && (
+          item.category === product.category ||
+          item.tags?.some(tag => product.tags?.includes(tag))
+        )
+      ).slice(0, 3); // Limit to 3 related products
+      
+      setRelatedProducts(filtered);
+    }
+  }, [product]);
 
   if (!product) {
     return (
@@ -125,16 +182,19 @@ export default function ProductDetail() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  const handleSendMessage = (message: string) => {
+    console.log('Sending message:', message);
+    // In a real app, this would send the message to an API
     
-    // Mock form submission - would connect to API in real implementation
+    // Simulate navigation to messages page
     setTimeout(() => {
-      setIsSubmitting(false);
-      setIsContactFormOpen(false);
-      // Would typically show a success message here
-    }, 1500);
+      router.push('/messages');
+    }, 500);
+  };
+  
+  const handleToggleWishlist = () => {
+    setIsWishlisted(!isWishlisted);
+    // In a real app, this would update the user's wishlist in the database
   };
 
   const pageVariants = {
@@ -151,6 +211,20 @@ export default function ProductDetail() {
       opacity: 1, 
       y: 0,
       transition: { duration: 0.5 }
+    }
+  };
+  
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.4 }
+    },
+    hover: { 
+      y: -10,
+      boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
+      transition: { duration: 0.2 }
     }
   };
 
@@ -209,9 +283,47 @@ export default function ProductDetail() {
 
               <h1 className="text-2xl sm:text-3xl font-bold mb-2">{product.title}</h1>
               <p className="text-2xl font-bold text-primary mb-4">${product.price}</p>
+              
+              {/* Tags */}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {product.tags?.map(tag => (
+                  <motion.span 
+                    key={tag}
+                    className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    #{tag}
+                  </motion.span>
+                ))}
+              </div>
+              
               <p className="text-gray-600 dark:text-gray-300 mb-6">
                 {product.description}
               </p>
+              
+              {/* Blockchain Verification */}
+              {product.transactionVerified && (
+                <div className="mb-6 p-3 bg-green-50 border border-green-100 rounded-md">
+                  <div className="flex items-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <span className="font-medium text-green-700">Blockchain Verified</span>
+                  </div>
+                  <p className="text-sm text-green-600">
+                    This product listing has been verified on the blockchain, ensuring authenticity and transparency.
+                  </p>
+                  <div className="mt-2 flex items-center">
+                    <span className="text-xs text-gray-500 truncate flex-1">
+                      Transaction: {product.transactionHash.slice(0, 10)}...{product.transactionHash.slice(-8)}
+                    </span>
+                    <button className="text-xs text-blue-600 hover:underline">
+                      View on Etherscan
+                    </button>
+                  </div>
+                </div>
+              )}
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="flex items-center">
@@ -230,12 +342,42 @@ export default function ProductDetail() {
               </div>
 
               <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
-                <Button onClick={() => setIsContactFormOpen(true)}>
+                <Button onClick={() => setIsMessageModalOpen(true)} className="flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
                   Contact Seller
                 </Button>
-                <Button variant="outline">
-                  Save to Wishlist
+                <Button 
+                  variant={isWishlisted ? "outline" : "outline"}
+                  onClick={handleToggleWishlist}
+                  className={`flex items-center justify-center ${isWishlisted ? 'text-red-500 border-red-500 hover:bg-red-50' : ''}`}
+                >
+                  {isWishlisted ? (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                      </svg>
+                      Added to Wishlist
+                    </>
+                  ) : (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                      Add to Wishlist
+                    </>
+                  )}
                 </Button>
+              </div>
+              
+              {/* Transaction Verification - Integration */}
+              <div className="mt-6">
+                <TransactionVerification 
+                  productId={product.id}
+                  transactionHash={product.transactionHash}
+                  isVerified={product.transactionVerified}
+                />
               </div>
             </motion.div>
 
@@ -248,232 +390,116 @@ export default function ProductDetail() {
             >
               <h2 className="text-xl font-bold mb-4">Specifications</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {product.specifications.map((spec, index) => (
-                  <div key={index} className="border-b pb-2">
-                    <span className="text-gray-500 dark:text-gray-400">{spec.name}:</span>
-                    <span className="ml-2 font-medium">{spec.value}</span>
+                {product.specifications?.map((spec, index) => (
+                  <div key={index} className="flex">
+                    <span className="font-medium w-1/3">{spec.name}:</span>
+                    <span className="text-gray-600 dark:text-gray-300 w-2/3">{spec.value}</span>
                   </div>
                 ))}
               </div>
             </motion.div>
-
-            {/* Blockchain Verification */}
-            <motion.div 
-              className="bg-white dark:bg-neutral-dark rounded-lg shadow-md p-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <h2 className="text-xl font-bold mb-4">REUSE Verification</h2>
-              <div className="flex items-start p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                <svg className="w-6 h-6 text-green-500 dark:text-green-400 mr-3 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <div>
-                  <h4 className="font-medium text-green-800 dark:text-green-300 mb-1">
-                    This product is verified on the blockchain
-                  </h4>
-                  <p className="text-sm text-green-600 dark:text-green-400">
-                    REUSE has verified this product's authenticity and the seller's legitimacy using blockchain technology.
-                  </p>
-                  <div className="mt-3">
-                    <Button variant="outline" size="sm">
-                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                      View Certificate
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
           </div>
 
-          {/* Seller Information */}
-          <div className="lg:col-span-1 space-y-6">
-            <motion.div 
-              className="bg-white dark:bg-neutral-dark rounded-lg shadow-md p-6"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              <h2 className="text-xl font-bold mb-4">About the Seller</h2>
+          {/* Seller Information and Actions */}
+          <motion.div 
+            className="space-y-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            {/* Seller Information */}
+            <div className="bg-white dark:bg-neutral-dark rounded-lg shadow-md p-6">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mr-3">
-                  <span className="text-gray-400">Logo</span>
+                <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center mr-3">
+                  <span className="text-xl font-bold text-gray-500 dark:text-gray-300">
+                    {product.businessName.charAt(0)}
+                  </span>
                 </div>
                 <div>
-                  <div className="flex items-center">
-                    <h3 className="font-semibold">{product.businessName}</h3>
+                  <h3 className="font-bold text-lg flex items-center">
+                    {product.businessName}
                     {product.verified && (
-                      <svg className="w-4 h-4 ml-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <svg className="w-5 h-5 text-blue-500 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
                     )}
-                  </div>
-                  <Link href={`/business/${product.businessId}`} className="text-sm text-primary hover:underline">
-                    View Profile
-                  </Link>
+                  </h3>
+                  {product.verified ? (
+                    <span className="text-sm text-green-600">Verified Seller</span>
+                  ) : (
+                    <span className="text-sm text-gray-500">Unverified Seller</span>
+                  )}
                 </div>
               </div>
-              
               <p className="text-gray-600 dark:text-gray-300 mb-4">
                 {product.businessDescription}
               </p>
-              
-              <div className="space-y-2 mb-4">
+              <div className="space-y-2">
                 <div className="flex items-center">
-                  <svg className="w-4 h-4 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
-                  <span className="text-sm">{product.businessContact}</span>
+                  <span className="text-gray-600 dark:text-gray-300">{product.businessContact}</span>
                 </div>
                 <div className="flex items-center">
-                  <svg className="w-4 h-4 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
-                  <span className="text-sm">{product.businessPhone}</span>
+                  <span className="text-gray-600 dark:text-gray-300">{product.businessPhone}</span>
                 </div>
               </div>
-              
-              <Button onClick={() => setIsContactFormOpen(true)} className="w-full">
-                Contact Seller
-              </Button>
-            </motion.div>
-            
+            </div>
+
             {/* Similar Products */}
-            <motion.div 
-              className="bg-white dark:bg-neutral-dark rounded-lg shadow-md p-6"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <h2 className="text-xl font-bold mb-4">Similar Products</h2>
+            <div className="bg-white dark:bg-neutral-dark rounded-lg shadow-md p-6">
+              <h3 className="font-bold text-lg mb-4">Related Products</h3>
               <div className="space-y-4">
-                {allListings
-                  .filter(item => item.id !== product.id && item.category === product.category)
-                  .slice(0, 3)
-                  .map(item => (
+                {relatedProducts.length > 0 ? (
+                  relatedProducts.map((item) => (
                     <motion.div 
                       key={item.id}
-                      className="flex items-start"
-                      whileHover={{ x: 5 }}
-                      transition={{ duration: 0.2 }}
+                      variants={cardVariants}
+                      initial="hidden"
+                      animate="visible"
+                      whileHover="hover"
+                      className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow transition-shadow cursor-pointer"
+                      onClick={() => router.push(`/marketplace/${item.id}`)}
                     >
-                      <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-md flex items-center justify-center mr-3 flex-shrink-0">
-                        <span className="text-xs text-gray-400">Image</span>
-                      </div>
-                      <div>
-                        <Link href={`/marketplace/${item.id}`} className="font-medium hover:text-primary transition-colors">
-                          {item.title}
-                        </Link>
-                        <p className="text-primary text-sm font-semibold">${item.price}</p>
-                        <div className="flex items-center text-xs text-gray-500">
-                          <span>{item.businessName}</span>
-                          {item.verified && (
-                            <svg className="w-3 h-3 ml-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                            </svg>
-                          )}
+                      <div className="flex space-x-3">
+                        <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded flex items-center justify-center flex-shrink-0">
+                          <span className="text-xs text-gray-400">Image</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-medium text-sm truncate">{item.title}</h4>
+                          <p className="text-primary font-bold text-sm">${item.price}</p>
+                          <div className="flex items-center mt-1">
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700">
+                              {item.condition}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </motion.div>
-                  ))}
+                  ))
+                ) : (
+                  <p className="text-gray-500 dark:text-gray-400 text-sm">
+                    No related products found.
+                  </p>
+                )}
               </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Contact Form Modal */}
-        {isContactFormOpen && (
-          <motion.div 
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div 
-              className="bg-white dark:bg-neutral-dark rounded-lg shadow-lg max-w-md w-full"
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            >
-              <div className="flex justify-between items-center p-4 border-b">
-                <h2 className="text-xl font-bold">Contact Seller</h2>
-                <button 
-                  className="text-gray-500 hover:text-gray-700"
-                  onClick={() => setIsContactFormOpen(false)}
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              <form onSubmit={handleSubmit} className="p-4 space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1" htmlFor="name">
-                    Your Name
-                  </label>
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full p-2 border rounded focus:ring-2 focus:ring-primary focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1" htmlFor="email">
-                    Your Email
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full p-2 border rounded focus:ring-2 focus:ring-primary focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1" htmlFor="message">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows={4}
-                    required
-                    value={formData.message}
-                    onChange={handleChange}
-                    className="w-full p-2 border rounded focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder={`I'm interested in the "${product.title}" and would like to know more.`}
-                  />
-                </div>
-                <div className="flex justify-end space-x-3 pt-2">
-                  <Button 
-                    variant="outline" 
-                    type="button"
-                    onClick={() => setIsContactFormOpen(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button 
-                    type="submit"
-                    isLoading={isSubmitting}
-                  >
-                    Send Message
-                  </Button>
-                </div>
-              </form>
-            </motion.div>
+            </div>
           </motion.div>
-        )}
+        </div>
       </motion.div>
+      
+      {/* Message Modal */}
+      <MessageModal
+        isOpen={isMessageModalOpen}
+        businessName={product.businessName}
+        productTitle={product.title}
+        onClose={() => setIsMessageModalOpen(false)}
+        onSend={handleSendMessage}
+      />
     </MainLayout>
   );
 } 
