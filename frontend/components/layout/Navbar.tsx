@@ -57,6 +57,11 @@ export default function Navbar() {
               </Link>
             </motion.div>
             <motion.div whileHover="hover" variants={navItemVariants}>
+              <Link href="/analytics" className="hover:text-primary transition-colors">
+                Analytics
+              </Link>
+            </motion.div>
+            <motion.div whileHover="hover" variants={navItemVariants}>
               <Link href="/about" className="hover:text-primary transition-colors">
                 About
               </Link>
@@ -142,6 +147,14 @@ export default function Navbar() {
             >
               <Link href="/label" className="block hover:text-primary transition-colors">
                 REUSE Label
+              </Link>
+            </motion.div>
+            <motion.div 
+              whileHover={{ x: 5 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Link href="/analytics" className="block hover:text-primary transition-colors">
+                Analytics
               </Link>
             </motion.div>
             <motion.div 
