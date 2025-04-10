@@ -80,8 +80,8 @@ export default function Home() {
                 <Link href="/marketplace">
                   <Button size="lg">Explore Marketplace</Button>
                 </Link>
-                <Link href="/about">
-                  <Button variant="outline" size="lg">Learn More</Button>
+                <Link href="/business">
+                  <Button variant="outline" size="lg">Business Dashboard</Button>
                 </Link>
               </motion.div>
             </motion.div>
@@ -137,7 +137,7 @@ export default function Home() {
                   B2B marketplace for sharing, selling, or donating unused equipment and assets.
                 </p>
                 <Link href="/marketplace">
-                  <Button variant="outline" size="sm">Learn More</Button>
+                  <Button variant="outline" size="sm">Explore Marketplace</Button>
                 </Link>
               </div>
             </motion.div>

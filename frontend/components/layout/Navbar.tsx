@@ -41,6 +41,11 @@ export default function Navbar() {
               </Link>
             </motion.div>
             <motion.div whileHover="hover" variants={navItemVariants}>
+              <Link href="/business" className="hover:text-primary transition-colors">
+                Business Dashboard
+              </Link>
+            </motion.div>
+            <motion.div whileHover="hover" variants={navItemVariants}>
               <Link href="/food" className="hover:text-primary transition-colors">
                 Food Waste
               </Link>
@@ -59,7 +64,7 @@ export default function Navbar() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Link href="/login" className="btn-primary">
+              <Link href="/auth/login" className="btn-primary">
                 Sign In
               </Link>
             </motion.div>
@@ -98,6 +103,14 @@ export default function Navbar() {
               whileHover={{ x: 5 }}
               transition={{ duration: 0.2 }}
             >
+              <Link href="/business" className="block hover:text-primary transition-colors">
+                Business Dashboard
+              </Link>
+            </motion.div>
+            <motion.div 
+              whileHover={{ x: 5 }}
+              transition={{ duration: 0.2 }}
+            >
               <Link href="/food" className="block hover:text-primary transition-colors">
                 Food Waste
               </Link>
@@ -122,7 +135,7 @@ export default function Navbar() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Link href="/login" className="block btn-primary inline-block mt-2">
+              <Link href="/auth/login" className="block btn-primary inline-block mt-2">
                 Sign In
               </Link>
             </motion.div>
