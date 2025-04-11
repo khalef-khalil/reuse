@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import MainLayout from '../../../components/layout/MainLayout';
 import Button from '../../../components/ui/Button';
 import MessageModal from '../../../components/ui/MessageModal';
@@ -134,12 +134,6 @@ export default function ProductDetail() {
   const { id } = useParams();
   const router = useRouter();
   const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState<typeof allListings>([]);
   const [isWishlisted, setIsWishlisted] = useState(false);
 
@@ -165,7 +159,7 @@ export default function ProductDetail() {
       <MainLayout>
         <div className="container-custom py-16 text-center">
           <h1 className="text-2xl font-bold mb-4">Product Not Found</h1>
-          <p className="mb-6">The product you're looking for doesn't exist or has been removed.</p>
+          <p className="mb-6">The product you&apos;re looking for doesn&apos;t exist or has been removed.</p>
           <Link href="/marketplace">
             <Button>Return to Marketplace</Button>
           </Link>
@@ -173,14 +167,6 @@ export default function ProductDetail() {
       </MainLayout>
     );
   }
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
 
   const handleSendMessage = (message: string) => {
     console.log('Sending message:', message);
@@ -205,15 +191,6 @@ export default function ProductDetail() {
     }
   };
 
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.5 }
-    }
-  };
-  
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { 

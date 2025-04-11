@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import MainLayout from '@/components/layout/MainLayout';
 
 export default function FoodListingPage() {
@@ -279,7 +280,13 @@ export default function FoodListingPage() {
                       <div className="border-2 border-dashed border-gray-300 rounded-md p-6 text-center">
                         {image ? (
                           <div className="mb-4">
-                            <img src={image} alt="Product preview" className="mx-auto h-48 object-contain" />
+                            <Image 
+                              src={image} 
+                              alt="Product preview" 
+                              className="mx-auto h-48 object-contain" 
+                              width={192} 
+                              height={192}
+                            />
                             <button
                               type="button"
                               onClick={() => setImage(null)}
@@ -376,7 +383,7 @@ export default function FoodListingPage() {
                 </li>
                 <li className="flex items-start">
                   <span className="bg-primary text-white w-6 h-6 rounded-full flex items-center justify-center mr-3 flex-shrink-0">2</span>
-                  <span>Add a clear image of your product so customers know what they're getting.</span>
+                  <span>Add a clear image of your product so customers know what they&apos;re getting.</span>
                 </li>
                 <li className="flex items-start">
                   <span className="bg-primary text-white w-6 h-6 rounded-full flex items-center justify-center mr-3 flex-shrink-0">3</span>
@@ -414,7 +421,7 @@ export default function FoodListingPage() {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  <span>Improve your business's sustainability profile</span>
+                  <span>Improve your business&apos;s sustainability profile</span>
                 </li>
                 <li className="flex items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mr-2" viewBox="0 0 20 20" fill="currentColor">

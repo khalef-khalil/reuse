@@ -206,7 +206,7 @@ export default function BusinessDashboard() {
             </motion.div>
             
             <motion.div variants={fadeIn} className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {mockListings.map((listing, index) => (
+              {mockListings.map((listing) => (
                 <motion.div
                   key={listing.id}
                   variants={itemVariant}
@@ -254,7 +254,7 @@ export default function BusinessDashboard() {
             </svg>
             <h3 className="text-xl font-semibold mb-2">Your Inbox</h3>
             <p className="text-gray-500 dark:text-gray-400 mb-4">
-              You don't have any messages yet. Messages from interested businesses will appear here.
+              You don&apos;t have any messages yet. Messages from interested businesses will appear here.
             </p>
             <Button variant="outline">Go to Marketplace</Button>
           </motion.div>

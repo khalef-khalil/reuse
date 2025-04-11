@@ -5,9 +5,19 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import MainLayout from '@/components/layout/MainLayout';
 
+interface ImpactDataType {
+  foodSaved: number;
+  co2Saved: number;
+  waterSaved: number;
+  moneySaved: number;
+  certificatesEarned: number;
+  weeklyProgress: number[];
+  monthlyComparison: number[];
+}
+
 export default function ImpactPage() {
   const [isLoading, setIsLoading] = useState(true);
-  const [impactData, setImpactData] = useState<any>(null);
+  const [impactData, setImpactData] = useState<ImpactDataType | null>(null);
   
   // Simulate loading impact data
   useEffect(() => {

@@ -3,11 +3,34 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import MainLayout from '@/components/layout/MainLayout';
 
+interface StoreData {
+  id: number;
+  name: string;
+  address: string;
+  phone: string;
+  openingHours: string;
+  description: string;
+  image: string;
+}
+
+interface FoodItem {
+  id: number;
+  name: string;
+  originalPrice: number;
+  discountedPrice: number;
+  expirationDate: string;
+  category: string;
+  quantity: number;
+  image: string;
+  verified: boolean;
+}
+
 export default function StoreDetailPage({ params }: { params: { id: string } }) {
-  const [store, setStore] = useState<any>(null);
-  const [foodItems, setFoodItems] = useState<any[]>([]);
+  const [store, setStore] = useState<StoreData | null>(null);
+  const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [reservedItems, setReservedItems] = useState<Set<number>>(new Set());
 
@@ -165,7 +188,13 @@ export default function StoreDetailPage({ params }: { params: { id: string } }) 
         >
           <div className="md:w-1/3">
             <div className="bg-white dark:bg-neutral-dark rounded-lg shadow-md overflow-hidden sticky top-24">
-              <img src={store.image} alt={store.name} className="w-full h-48 object-cover" />
+              <Image 
+                src={store.image} 
+                alt={store.name} 
+                width={600}
+                height={192}
+                className="w-full h-48 object-cover" 
+              />
               <div className="p-6">
                 <h1 className="text-3xl font-bold mb-3">{store.name}</h1>
                 <p className="text-gray-600 dark:text-gray-300 mb-4">{store.description}</p>
@@ -222,7 +251,13 @@ export default function StoreDetailPage({ params }: { params: { id: string } }) 
                   >
                     <div className="flex flex-col md:flex-row">
                       <div className="md:w-1/3">
-                        <img src={item.image} alt={item.name} className="w-full h-48 md:h-full object-cover" />
+                        <Image 
+                          src={item.image} 
+                          alt={item.name} 
+                          width={300}
+                          height={192}
+                          className="w-full h-48 md:h-full object-cover" 
+                        />
                       </div>
                       <div className="p-6 md:w-2/3">
                         <div className="flex justify-between items-start mb-2">

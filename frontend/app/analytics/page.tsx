@@ -2,21 +2,11 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import MainLayout from '../../components/layout/MainLayout';
 import Button from '../../components/ui/Button';
 import React from 'react';
 
 // Types
-interface MetricCardProps {
-  title: string;
-  value: string;
-  change: number;
-  icon: React.ReactNode;
-  delay?: number;
-  key?: string | number;
-}
-
 interface ChartData {
   label: string;
   value: number;
@@ -115,40 +105,6 @@ export default function AnalyticsDashboard() {
     }
   };
 
-  const renderMetricCard = ({ title, value, change, icon, delay = 0 }: MetricCardProps) => (
-    <motion.div 
-      className="bg-white dark:bg-neutral-dark rounded-lg shadow-md overflow-hidden"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: delay * 0.1, duration: 0.5 }}
-      whileHover={{ y: -5, boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)" }}
-    >
-      <div className="p-6">
-        <div className="flex justify-between items-start">
-          <div>
-            <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">{title}</h3>
-            <div className="text-2xl font-bold mt-2">{value}</div>
-          </div>
-          <div className="p-2 rounded-full bg-primary/10 text-primary">
-            {icon}
-          </div>
-        </div>
-        <div className={`mt-4 flex items-center text-sm ${change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-          {change >= 0 ? (
-            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
-            </svg>
-          ) : (
-            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-          )}
-          <span>{Math.abs(change)}% from last period</span>
-        </div>
-      </div>
-    </motion.div>
-  );
-
   const renderTimeframeSelector = () => (
     <div className="flex justify-center mb-8">
       <div className="inline-flex p-1 space-x-1 bg-gray-100 dark:bg-neutral-dark rounded-lg">
@@ -186,7 +142,7 @@ export default function AnalyticsDashboard() {
         ].map((tab) => (
           <motion.button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
+            onClick={() => setActiveTab(tab.id as 'overview' | 'impact' | 'business' | 'food')}
             className={`pb-4 text-sm font-medium border-b-2 transition-colors ${
               activeTab === tab.id 
                 ? 'border-primary text-primary' 

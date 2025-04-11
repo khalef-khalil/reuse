@@ -196,24 +196,6 @@ export default function Marketplace() {
   const [filteredListings, setFilteredListings] = useState(allListings);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  // Convert array categories to objects with value and label
-  const categoryOptions = [
-    { value: 'All Categories', label: 'All Categories' },
-    ...categories.filter(cat => cat !== 'All Categories').map(cat => ({ value: cat, label: cat }))
-  ];
-
-  // Convert array conditions to objects with value and label
-  const conditionOptions = [
-    { value: 'All Conditions', label: 'All Conditions' },
-    ...conditions.filter(cond => cond !== 'All Conditions').map(cond => ({ value: cond, label: cond }))
-  ];
-
-  // Convert array businesses to objects with value and label
-  const businessOptions = [
-    { value: 'All Businesses', label: 'All Businesses' },
-    ...businesses.map(business => ({ value: business.name, label: business.name }))
-  ];
-
   // Filter listings based on selected filters
   useEffect(() => {
     let results = [...allListings];
@@ -283,16 +265,6 @@ export default function Marketplace() {
       y: -10,
       boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
       transition: { duration: 0.2 }
-    }
-  };
-
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
     }
   };
 
@@ -634,7 +606,7 @@ export default function Marketplace() {
                 </div>
                 <h3 className="text-xl font-bold mb-2">No listings found</h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  We couldn't find any listings matching your search criteria.
+                  We couldn&apos;t find any listings matching your search criteria.
                 </p>
                 <Button onClick={handleResetFilters}>
                   Reset Filters

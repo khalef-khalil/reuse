@@ -230,7 +230,7 @@ export default function VerificationPage() {
             
             <div className="p-6 text-center">
               <p className="text-gray-700 mb-4">
-                We couldn't find a valid certificate for the product ID "{searchQuery}".
+                We couldn&apos;t find a valid certificate for the product ID &quot;{searchQuery}&quot;.
               </p>
               <p className="text-gray-500 mb-6">
                 This may indicate that the product has not been certified or the ID is incorrect.
@@ -267,7 +267,7 @@ export default function VerificationPage() {
                   <span className="text-sm font-bold">1</span>
                 </div>
                 <p className="text-gray-700">
-                  Every REUSE Label has a unique product ID that's verifiable on the blockchain
+                  Every REUSE Label has a unique product ID that&apos;s verifiable on the blockchain
                 </p>
               </div>
               <div className="flex items-start">
@@ -275,7 +275,7 @@ export default function VerificationPage() {
                   <span className="text-sm font-bold">2</span>
                 </div>
                 <p className="text-gray-700">
-                  The verification process checks the certificate's validity directly on the blockchain
+                  The verification process checks the certificate&apos;s validity directly on the blockchain
                 </p>
               </div>
               <div className="flex items-start">

@@ -14,12 +14,6 @@ interface FoodMetric {
   icon: React.ReactNode;
 }
 
-interface FoodCategoryData {
-  category: string;
-  percentage: number;
-  color: string;
-}
-
 export default function FoodWasteAnalytics() {
   const [timeframe, setTimeframe] = useState<'month' | 'quarter' | 'year'>('month');
   
@@ -337,7 +331,6 @@ export default function FoodWasteAnalytics() {
                       .slice(0, index)
                       .reduce((sum, cat) => sum + cat.percentage, 0);
                     const rotateStart = (previousPercentages / 100) * 360;
-                    const rotateEnd = ((previousPercentages + category.percentage) / 100) * 360;
                     
                     return (
                       <motion.div 
@@ -402,7 +395,7 @@ export default function FoodWasteAnalytics() {
               <div className="bg-blue-500/10 rounded-lg p-4 text-center">
                 <div className="text-3xl font-bold text-blue-500 mb-2">8,450</div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">Liters of Water Saved</div>
-                <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">Equivalent to 56 households' daily usage</div>
+                <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">Equivalent to 56 households&apos; daily usage</div>
               </div>
               <div className="bg-yellow-500/10 rounded-lg p-4 text-center">
                 <div className="text-3xl font-bold text-yellow-500 mb-2">2,120</div>

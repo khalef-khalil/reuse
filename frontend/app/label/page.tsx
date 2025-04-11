@@ -164,7 +164,7 @@ export default function LabelPage() {
               <p className="text-gray-600 mb-2">Our certification process involves:</p>
               <ul className="list-disc list-inside text-gray-600 space-y-1 ml-4">
                 <li>Submit your product for verification</li>
-                <li>Our team assesses the product's condition and reusability</li>
+                <li>Our team assesses the product&apos;s condition and reusability</li>
                 <li>Once approved, the certificate is issued on the blockchain</li>
                 <li>You can download and display the REUSE Label on your product</li>
               </ul>

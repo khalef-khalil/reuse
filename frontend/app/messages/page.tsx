@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import MainLayout from '../../components/layout/MainLayout';
 import Button from '../../components/ui/Button';
-import Link from 'next/link';
 import Image from 'next/image';
 
 // Mock conversation data
@@ -155,11 +154,18 @@ const mockMessages = {
   ],
 };
 
+interface Message {
+  id: string;
+  senderId: string;
+  text: string;
+  timestamp: string;
+}
+
 export default function MessagesPage() {
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const [messageText, setMessageText] = useState('');
   const [conversations, setConversations] = useState(mockConversations);
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -351,7 +357,7 @@ export default function MessagesPage() {
                   {/* Messages */}
                   <div className="flex-1 p-4 overflow-y-auto bg-gray-50">
                     <AnimatePresence>
-                      {messages.map((message, index) => (
+                      {messages.map((message) => (
                         <motion.div
                           key={message.id}
                           variants={messageVariants}

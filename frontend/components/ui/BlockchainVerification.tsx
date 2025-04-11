@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Button from './Button';
 
@@ -10,6 +10,14 @@ interface BlockchainVerificationProps {
   onVerify: () => void;
 }
 
+interface VerificationDetails {
+  timestamp: string;
+  block: number;
+  network: string;
+  status: string;
+  gas: number;
+}
+
 export default function BlockchainVerification({ 
   transactionHash, 
   productId,
@@ -17,7 +25,7 @@ export default function BlockchainVerification({
 }: BlockchainVerificationProps) {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-  const [verificationDetails, setVerificationDetails] = useState<any>(null);
+  const [verificationDetails, setVerificationDetails] = useState<VerificationDetails | null>(null);
 
   // Mock blockchain verification
   const handleVerify = () => {
@@ -59,7 +67,7 @@ export default function BlockchainVerification({
       {!isVerified ? (
         <div className="space-y-4">
           <p className="text-gray-600 text-sm">
-            Verify this product's authentication on the blockchain network to ensure its
+            Verify this product&apos;s authentication on the blockchain network to ensure its
             legitimacy and track its history.
           </p>
           

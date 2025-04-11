@@ -115,7 +115,7 @@ export default function FoodItemDetailPage() {
       <MainLayout>
         <div className="container-custom py-12 text-center">
           <h1 className="text-3xl font-bold mb-4">Item Not Found</h1>
-          <p className="mb-8">The food item you're looking for doesn't exist or has been removed.</p>
+          <p className="mb-8">The food item you&apos;re looking for doesn&apos;t exist or has been removed.</p>
           <Link href="/food">
             <motion.div
               className="inline-block px-6 py-3 bg-primary text-white font-semibold rounded-lg"
@@ -336,7 +336,7 @@ export default function FoodItemDetailPage() {
             </div>
             
             <div className="mt-6 text-gray-500 text-sm">
-              By reserving this item, you'll help reduce food waste and save ${totalSavings}!
+              By reserving this item, you&apos;ll help reduce food waste and save ${totalSavings}!
             </div>
           </motion.div>
         </div>
@@ -371,6 +371,15 @@ export default function FoodItemDetailPage() {
           </div>
         </div>
       </div>
+      {reserved && (
+        <motion.div 
+          className="mt-4 text-green-700 font-medium"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          Your order of ${totalPrice} has been reserved!
+        </motion.div>
+      )}
     </MainLayout>
   );
 } 

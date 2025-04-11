@@ -45,28 +45,6 @@ export default function CertificationPage() {
     },
   ]);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: 'spring',
-        stiffness: 100,
-      },
-    },
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -322,7 +300,7 @@ export default function CertificationPage() {
             </div>
             <h2 className="text-2xl font-bold mb-2">Application Submitted!</h2>
             <p className="text-gray-600 mb-6 max-w-md mx-auto">
-              Your product has been submitted for certification. We'll review your application and get back to you shortly.
+              Your product has been submitted for certification. We&apos;ll review your application and get back to you shortly.
             </p>
             
             <div className="flex space-x-4 justify-center">
