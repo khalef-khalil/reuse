@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './leaflet.css';
+
 :root {
   --primary: #4CAF50;  /* Green for sustainability theme */
   --secondary: #388E3C;

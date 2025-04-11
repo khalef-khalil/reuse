@@ -1,0 +1,72 @@
+/* Import Leaflet CSS */
+@import 'leaflet/dist/leaflet.css';
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+}
+
+.store-marker {
+  background-color: white;
+  border: 2px solid #3B82F6;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.store-marker:hover {
+  transform: scale(1.1);
+}
+
+.store-marker.active {
+  background-color: #3B82F6;
+  color: white;
+}
+
+.store-popup .leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  padding: 0;
+}
+
+.store-popup .leaflet-popup-content {
+  margin: 0;
+  width: 250px !important;
+}
+
+.popup-content {
+  padding: 12px;
+}
+
+.popup-content h3 {
+  margin: 0 0 4px 0;
+  font-weight: 600;
+}
+
+.popup-content p {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: #6B7280;
+}
+
+.popup-content .items-available {
+  font-weight: 600;
+  color: #3B82F6;
+}
+
+.popup-content .view-store {
+  display: inline-flex;
+  align-items: center;
+  color: #3B82F6;
+  font-size: 14px;
+  margin-top: 8px;
+  text-decoration: none;
+}
+
+.popup-content .view-store:hover {
+  text-decoration: underline;
+} 

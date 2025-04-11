@@ -1,16 +1,124 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import MainLayout from '@/components/layout/MainLayout';
+import dynamic from 'next/dynamic';
+import { divIcon } from 'leaflet';
+
+// Dynamically import Leaflet components to avoid SSR issues
+const MapContainer = dynamic(
+  () => import('react-leaflet').then((mod) => mod.MapContainer),
+  { ssr: false }
+);
+const TileLayer = dynamic(
+  () => import('react-leaflet').then((mod) => mod.TileLayer),
+  { ssr: false }
+);
+const Marker = dynamic(
+  () => import('react-leaflet').then((mod) => mod.Marker),
+  { ssr: false }
+);
+const Popup = dynamic(
+  () => import('react-leaflet').then((mod) => mod.Popup),
+  { ssr: false }
+);
+const useMap = dynamic(
+  () => import('react-leaflet').then((mod) => mod.useMap),
+  { ssr: false }
+);
+
+// Component to handle user's current location
+function LocationButton() {
+  const map = useMap();
+
+  const handleGetLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          map.flyTo([latitude, longitude], 15);
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          alert("Unable to get your location. Please check your browser permissions.");
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+  };
+
+  return (
+    <div className="absolute top-4 left-4 z-[999] bg-white dark:bg-neutral-dark p-2 rounded-md shadow-md">
+      <div className="flex items-center space-x-2">
+        <button 
+          className="p-2 bg-primary text-white rounded-full"
+          onClick={handleGetLocation}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+          </svg>
+        </button>
+        <span className="text-sm">Use my location</span>
+      </div>
+    </div>
+  );
+}
+
+// Separate Store Marker component to ensure proper mounting/unmounting
+const StoreMarkerWithPopup = ({ store, selectedStore, onSelect }: any) => {
+  // Create a memoized divIcon for the marker to prevent recreating on every render
+  const customIcon = useMemo(() => {
+    return divIcon({
+      className: 'custom-icon',
+      html: `
+        <div class="store-marker ${selectedStore === store.id ? 'active' : ''}">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+        </div>
+      `,
+      iconSize: [36, 36],
+      iconAnchor: [18, 18],
+      popupAnchor: [0, -18],
+    });
+  }, [store.id, selectedStore]);
+
+  return (
+    <Marker 
+      key={`marker-${store.id}`}
+      position={[store.lat, store.lng]}
+      icon={customIcon}
+      eventHandlers={{
+        click: () => onSelect(store.id),
+      }}
+    >
+      <Popup className="store-popup">
+        <div className="popup-content">
+          <h3>{store.name}</h3>
+          <p>{store.address}</p>
+          <p><span className="items-available">{store.itemsAvailable}</span> items available</p>
+          <Link href={`/food/store/${store.id}`} className="view-store">
+            View store details
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+            </svg>
+          </Link>
+        </div>
+      </Popup>
+    </Marker>
+  );
+};
 
 function MapContent() {
   const searchParams = useSearchParams();
   const storeId = searchParams.get('storeId');
   const [selectedStore, setSelectedStore] = useState<number | null>(storeId ? parseInt(storeId) : null);
   const [isMapLoading, setIsMapLoading] = useState(true);
+  const [mapReady, setMapReady] = useState(false);
 
   const stores = [
     {
@@ -42,14 +150,72 @@ function MapContent() {
     },
   ];
 
+  // Memoize the center coordinates to avoid recalculation on every render
+  const mapCenter = useMemo(() => [
+    stores.reduce((sum, store) => sum + store.lat, 0) / stores.length,
+    stores.reduce((sum, store) => sum + store.lng, 0) / stores.length
+  ] as [number, number], [stores]);
+
   useEffect(() => {
     // Simulate loading map
     const timer = setTimeout(() => {
       setIsMapLoading(false);
-    }, 1500);
+      // Give a small delay to ensure map components are loaded
+      setTimeout(() => setMapReady(true), 500);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
+
+  const handleStoreSelect = (id: number) => {
+    setSelectedStore(id);
+    
+    // If the map is ready, find the store and center the map on it
+    if (mapReady) {
+      const store = stores.find((s) => s.id === id);
+      if (store) {
+        // We need to scroll the list item into view here
+        const storeElement = document.getElementById(`store-${id}`);
+        if (storeElement) {
+          storeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
+    }
+  };
+
+  // Create Map component separately and only when loading is complete
+  const MapComponent = useMemo(() => {
+    if (isMapLoading) return null;
+    
+    return (
+      <MapContainer 
+        center={mapCenter} 
+        zoom={14} 
+        scrollWheelZoom={true}
+        style={{ height: '100%', width: '100%' }}
+        className="z-0"
+        key="map-container"
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        
+        {/* Add markers for each store */}
+        {stores.map((store) => (
+          <StoreMarkerWithPopup 
+            key={`store-marker-${store.id}`}
+            store={store}
+            selectedStore={selectedStore}
+            onSelect={handleStoreSelect}
+          />
+        ))}
+        
+        {/* Location button */}
+        <LocationButton />
+      </MapContainer>
+    );
+  }, [isMapLoading, stores, selectedStore, mapCenter]);
 
   return (
     <>
@@ -84,46 +250,7 @@ function MapContent() {
                 transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
               />
             </div>
-          ) : (
-            <>
-              <div className="absolute top-4 left-4 z-10 bg-white dark:bg-neutral-dark p-2 rounded-md shadow-md">
-                <div className="flex items-center space-x-2">
-                  <button className="p-2 bg-primary text-white rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                    </svg>
-                  </button>
-                  <span className="text-sm">Use my location</span>
-                </div>
-              </div>
-              
-              {/* This would be replaced with a real map component like React Map GL */}
-              <div className="h-full w-full bg-blue-100 flex items-center justify-center">
-                <div className="text-center p-4">
-                  <p className="mb-2 font-semibold">Interactive Map Would Be Here</p>
-                  <p className="text-sm text-gray-600">Using react-map-gl or similar library</p>
-                  
-                  {/* Store Markers */}
-                  <div className="mt-8 flex justify-center space-x-6">
-                    {stores.map((store) => (
-                      <motion.div 
-                        key={store.id}
-                        className={`p-2 rounded-full ${selectedStore === store.id ? 'bg-primary text-white' : 'bg-white text-primary'}`}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => setSelectedStore(store.id)}
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
+          ) : MapComponent}
         </motion.div>
 
         <div>
@@ -182,12 +309,13 @@ function MapContent() {
             {stores.map((store, index) => (
               <motion.div
                 key={store.id}
+                id={`store-${store.id}`}
                 className={`p-4 rounded-lg ${selectedStore === store.id ? 'bg-primary/10 border border-primary' : 'bg-white dark:bg-neutral-dark'} shadow-md`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 + (index * 0.1) }}
                 whileHover={{ y: -5 }}
-                onClick={() => setSelectedStore(store.id)}
+                onClick={() => handleStoreSelect(store.id)}
               >
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="font-semibold">{store.name}</h3>
