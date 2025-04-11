@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import MainLayout from '../../components/layout/MainLayout';
 import Button from '../../components/ui/Button';
@@ -60,7 +61,7 @@ const allListings = [
   {
     id: 'p1',
     title: 'Office Desks (Set of 4)',
-    image: '/images/placeholder.png',
+    image: '/images/marketplace/office-desks.jpg',
     price: 1200,
     condition: 'Good',
     category: 'Furniture',
@@ -76,7 +77,7 @@ const allListings = [
   {
     id: 'p2',
     title: 'Dell OptiPlex Desktops',
-    image: '/images/placeholder.png',
+    image: '/images/marketplace/dell-desktops.jpg',
     price: 2500,
     condition: 'Excellent',
     category: 'Electronics',
@@ -92,7 +93,7 @@ const allListings = [
   {
     id: 'p3',
     title: 'Conference Room Chairs',
-    image: '/images/placeholder.png',
+    image: '/images/marketplace/conference-chairs.jpg',
     price: 800,
     condition: 'Fair',
     category: 'Furniture',
@@ -108,7 +109,7 @@ const allListings = [
   {
     id: 'p4',
     title: 'HP Color LaserJet Printer',
-    image: '/images/placeholder.png',
+    image: '/images/marketplace/hp-printer.jpg',
     price: 350,
     condition: 'Good',
     category: 'Electronics',
@@ -124,7 +125,7 @@ const allListings = [
   {
     id: 'p5',
     title: 'Steel Filing Cabinets',
-    image: '/images/placeholder.png',
+    image: '/images/marketplace/filing-cabinets.jpg',
     price: 600,
     condition: 'Like New',
     category: 'Office Supplies',
@@ -140,7 +141,7 @@ const allListings = [
   {
     id: 'p6',
     title: 'MacBook Pro (2021)',
-    image: '/images/placeholder.png',
+    image: '/images/marketplace/macbook-pro.jpg',
     price: 1500,
     condition: 'Excellent',
     category: 'Electronics',
@@ -156,7 +157,7 @@ const allListings = [
   {
     id: 'p7',
     title: 'Office Partition Screens',
-    image: '/images/placeholder.png',
+    image: '/images/marketplace/partition-screens.jpg',
     price: 900,
     condition: 'Good',
     category: 'Furniture',
@@ -172,7 +173,7 @@ const allListings = [
   {
     id: 'p8',
     title: 'Acer Projector',
-    image: '/images/placeholder.png',
+    image: '/images/marketplace/acer-projector.jpg',
     price: 450,
     condition: 'Excellent',
     category: 'Electronics',
@@ -630,8 +631,14 @@ export default function Marketplace() {
                     layout
                   >
                     <Link href={`/marketplace/${item.id}`} className="block">
-                      <div className="h-48 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                        <span className="text-gray-400">Product Image</span>
+                      <div className="h-48 relative">
+                        <Image 
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          style={{ objectFit: 'cover' }}
+                        />
                       </div>
                       
                       <div className="p-5">

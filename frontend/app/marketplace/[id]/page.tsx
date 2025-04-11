@@ -8,6 +8,7 @@ import MainLayout from '../../../components/layout/MainLayout';
 import Button from '../../../components/ui/Button';
 import MessageModal from '../../../components/ui/MessageModal';
 import TransactionVerification from './TransactionVerification';
+import Image from 'next/image';
 
 // Mock listings data (same as in marketplace page)
 const allListings = [
@@ -232,8 +233,15 @@ export default function ProductDetail() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="h-64 sm:h-96 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                <div className="text-gray-400 text-xl">Product Image</div>
+              <div className="h-64 sm:h-96 relative">
+                <Image 
+                  src={product.image}
+                  alt={product.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
+                  style={{ objectFit: 'cover' }}
+                  priority
+                />
               </div>
             </motion.div>
 
