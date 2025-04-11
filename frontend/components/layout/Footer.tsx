@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
   return (
@@ -6,7 +7,14 @@ export default function Footer() {
       <div className="container-custom">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="font-bold text-xl text-primary mb-4">REUSE</h3>
+            <div className="mb-4">
+              <Image 
+                src="/logo.png" 
+                alt="REUSE Logo" 
+                width={80} 
+                height={80}
+              />
+            </div>
             <p className="text-sm mb-4">
               A sustainable platform for resource sharing and waste reduction.
             </p>

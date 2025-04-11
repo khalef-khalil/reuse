@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
@@ -29,8 +30,14 @@ export default function Navbar() {
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <Link href="/" className="font-bold text-2xl text-primary">
-              REUSE
+            <Link href="/" className="flex items-center">
+              <Image 
+                src="/logo.png" 
+                alt="REUSE Logo" 
+                width={90} 
+                height={90}
+                priority
+              />
             </Link>
           </motion.div>
           
