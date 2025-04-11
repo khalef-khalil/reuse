@@ -5,6 +5,10 @@ import { motion } from 'framer-motion';
 import MainLayout from '../../components/layout/MainLayout';
 import Button from '../../components/ui/Button';
 import React from 'react';
+import {
+  AreaChart, Area, BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
+} from 'recharts';
 
 // Types
 interface ChartData {
@@ -60,30 +64,72 @@ export default function AnalyticsDashboard() {
     }
   ];
 
-  const impactChartData: ChartData[] = [
-    { label: 'Jan', value: 32 },
-    { label: 'Feb', value: 45 },
-    { label: 'Mar', value: 58 },
-    { label: 'Apr', value: 72 },
-    { label: 'May', value: 84 },
-    { label: 'Jun', value: 96 },
-    { label: 'Jul', value: 112 },
-    { label: 'Aug', value: 128 },
-    { label: 'Sep', value: 116 },
-    { label: 'Oct', value: 98 },
-    { label: 'Nov', value: 87 },
-    { label: 'Dec', value: 76 },
+  const impactChartData = [
+    { name: 'Jan', value: 32 },
+    { name: 'Feb', value: 45 },
+    { name: 'Mar', value: 58 },
+    { name: 'Apr', value: 72 },
+    { name: 'May', value: 84 },
+    { name: 'Jun', value: 96 },
+    { name: 'Jul', value: 112 },
+    { name: 'Aug', value: 128 },
+    { name: 'Sep', value: 116 },
+    { name: 'Oct', value: 98 },
+    { name: 'Nov', value: 87 },
+    { name: 'Dec', value: 76 },
   ];
 
   const businessDistribution = [
-    { label: 'Manufacturing', value: 35, growth: 12.3 },
-    { label: 'Retail', value: 25, growth: 8.7 },
-    { label: 'Services', value: 20, growth: 15.2 },
-    { label: 'Tech', value: 15, growth: 18.6 },
-    { label: 'Other', value: 5, growth: 3.1 },
+    { name: 'Manufacturing', value: 35, growth: 12.3 },
+    { name: 'Retail', value: 25, growth: 8.7 },
+    { name: 'Services', value: 20, growth: 15.2 },
+    { name: 'Tech', value: 15, growth: 18.6 },
+    { name: 'Other', value: 5, growth: 3.1 },
   ];
 
-  const maxChartValue = Math.max(...impactChartData.map(item => item.value));
+  const resourceConservationData = [
+    { name: 'Water', value: 4200 },
+    { name: 'Energy', value: 3500 },
+    { name: 'Materials', value: 5800 },
+    { name: 'Land', value: 2900 },
+  ];
+
+  const transactionVolumeData = [
+    { name: 'Jan', value: 25 },
+    { name: 'Feb', value: 35 },
+    { name: 'Mar', value: 45 },
+    { name: 'Apr', value: 42 },
+    { name: 'May', value: 55 },
+    { name: 'Jun', value: 75 },
+  ];
+
+  const userGrowthData = [
+    { name: 'Jan', value: 210 },
+    { name: 'Feb', value: 325 },
+    { name: 'Mar', value: 450 },
+    { name: 'Apr', value: 650 },
+    { name: 'May', value: 850 },
+    { name: 'Jun', value: 1050 },
+  ];
+
+  const foodWasteSavingsData = [
+    { name: 'Jan', value: 120 },
+    { name: 'Feb', value: 140 },
+    { name: 'Mar', value: 180 },
+    { name: 'Apr', value: 210 },
+    { name: 'May', value: 240 },
+    { name: 'Jun', value: 290 },
+  ];
+
+  const foodCategoriesData = [
+    { name: 'Produce', value: 40 },
+    { name: 'Dairy', value: 20 },
+    { name: 'Bakery', value: 15 },
+    { name: 'Meat', value: 10 },
+    { name: 'Other', value: 15 },
+  ];
+
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#9146FF'];
 
   // Animation variants
   const fadeIn = {
@@ -207,50 +253,44 @@ export default function AnalyticsDashboard() {
               <div className="lg:col-span-2 bg-white dark:bg-neutral-dark rounded-lg shadow-md p-6">
                 <h3 className="text-lg font-semibold mb-4">Environmental Impact Trend</h3>
                 <div className="h-64">
-                  <div className="h-full flex items-end justify-between">
-                    {impactChartData.map((item, index) => (
-                      <div key={item.label} className="flex flex-col items-center group">
-                        <motion.div
-                          className="w-8 bg-primary rounded-t-md relative mx-1"
-                          initial={{ height: 0 }}
-                          animate={{ 
-                            height: `${(item.value / maxChartValue) * 100}%`,
-                            transition: { delay: 0.5 + index * 0.05, duration: 0.8, ease: "easeOut" }
-                          }}
-                        >
-                          <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-primary text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                            {item.value} kg
-                          </div>
-                        </motion.div>
-                        <div className="mt-2 text-xs text-gray-500">{item.label}</div>
-                      </div>
-                    ))}
-                  </div>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart
+                      data={impactChartData}
+                      margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Area type="monotone" dataKey="value" stroke="#8884d8" fill="#8884d8" />
+                    </AreaChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
               
               <div className="bg-white dark:bg-neutral-dark rounded-lg shadow-md p-6">
                 <h3 className="text-lg font-semibold mb-4">Distribution by Industry</h3>
-                <div className="space-y-4">
-                  {businessDistribution.map((item, index) => (
-                    <div key={item.label}>
-                      <div className="flex justify-between mb-1">
-                        <span className="text-gray-700 dark:text-gray-300">{item.label}</span>
-                        <div className="flex items-center">
-                          <span className="text-gray-600 dark:text-gray-400 mr-2">{item.value}%</span>
-                          <span className="text-xs text-green-500">+{item.growth}%</span>
-                        </div>
-                      </div>
-                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                        <motion.div 
-                          className="bg-primary h-2 rounded-full" 
-                          initial={{ width: 0 }}
-                          animate={{ width: `${item.value}%` }}
-                          transition={{ delay: 0.7 + (index * 0.1), duration: 0.8 }}
-                        ></motion.div>
-                      </div>
-                    </div>
-                  ))}
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={businessDistribution}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="value"
+                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      >
+                        {businessDistribution.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
             </motion.div>
@@ -264,48 +304,49 @@ export default function AnalyticsDashboard() {
             transition={{ duration: 0.5 }}
           >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-              {/* Environmental impact detailed metrics would go here */}
               <div className="bg-white dark:bg-neutral-dark rounded-lg shadow-md p-6">
                 <h3 className="text-lg font-semibold mb-4">Carbon Footprint Reduction</h3>
                 <div className="h-64">
-                  <div className="flex items-center justify-center h-full">
-                    <div className="w-full h-full flex items-end justify-between">
-                      {[
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={[
                         { month: 'Jan', value: 245 },
                         { month: 'Feb', value: 285 },
                         { month: 'Mar', value: 332 },
                         { month: 'Apr', value: 378 },
                         { month: 'May', value: 410 },
                         { month: 'Jun', value: 458 }
-                      ].map((item, index) => (
-                        <div key={item.month} className="flex flex-col items-center group">
-                          <motion.div
-                            className="w-8 bg-green-500 rounded-t-md relative mx-1"
-                            initial={{ height: 0 }}
-                            animate={{ 
-                              height: `${(item.value / 458) * 100}%`,
-                              transition: { delay: 0.5 + index * 0.05, duration: 0.8, ease: "easeOut" }
-                            }}
-                          >
-                            <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                              {item.value} kg CO₂
-                            </div>
-                          </motion.div>
-                          <div className="mt-2 text-xs text-gray-500">{item.month}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                      ]}
+                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="value" name="CO₂ Reduction (kg)" fill="#00C49F" />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
               
               <div className="bg-white dark:bg-neutral-dark rounded-lg shadow-md p-6">
                 <h3 className="text-lg font-semibold mb-4">Resource Conservation</h3>
                 <div className="h-64">
-                  {/* Placeholder for resource conservation chart */}
-                  <div className="flex items-center justify-center h-full text-gray-400">
-                    Resource conservation visualization
-                  </div>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={resourceConservationData}
+                      layout="vertical"
+                      margin={{ top: 20, right: 30, left: 40, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis type="number" />
+                      <YAxis dataKey="name" type="category" />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="value" name="Units Saved" fill="#0088FE" />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
             </div>
@@ -327,24 +368,41 @@ export default function AnalyticsDashboard() {
             transition={{ duration: 0.5 }}
           >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-              {/* Business metrics would go here */}
               <div className="bg-white dark:bg-neutral-dark rounded-lg shadow-md p-6">
                 <h3 className="text-lg font-semibold mb-4">Transaction Volume</h3>
                 <div className="h-64">
-                  {/* Placeholder for transaction volume chart */}
-                  <div className="flex items-center justify-center h-full text-gray-400">
-                    Transaction volume visualization
-                  </div>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart
+                      data={transactionVolumeData}
+                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Line type="monotone" dataKey="value" name="Transactions" stroke="#FF8042" strokeWidth={2} />
+                    </LineChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
               
               <div className="bg-white dark:bg-neutral-dark rounded-lg shadow-md p-6">
                 <h3 className="text-lg font-semibold mb-4">User Growth</h3>
                 <div className="h-64">
-                  {/* Placeholder for user growth chart */}
-                  <div className="flex items-center justify-center h-full text-gray-400">
-                    User growth visualization
-                  </div>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart
+                      data={userGrowthData}
+                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Area type="monotone" dataKey="value" name="Users" stroke="#9146FF" fill="#9146FF" fillOpacity={0.3} />
+                    </AreaChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
             </div>
@@ -384,24 +442,48 @@ export default function AnalyticsDashboard() {
             transition={{ duration: 0.5 }}
           >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-              {/* Food waste metrics would go here */}
               <div className="bg-white dark:bg-neutral-dark rounded-lg shadow-md p-6">
                 <h3 className="text-lg font-semibold mb-4">Food Waste Savings</h3>
                 <div className="h-64">
-                  {/* Placeholder for food waste savings chart */}
-                  <div className="flex items-center justify-center h-full text-gray-400">
-                    Food waste reduction visualization
-                  </div>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={foodWasteSavingsData}
+                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="value" name="Food Saved (kg)" fill="#FFBB28" />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
               
               <div className="bg-white dark:bg-neutral-dark rounded-lg shadow-md p-6">
                 <h3 className="text-lg font-semibold mb-4">Food Categories</h3>
                 <div className="h-64">
-                  {/* Placeholder for food categories chart */}
-                  <div className="flex items-center justify-center h-full text-gray-400">
-                    Food categories visualization
-                  </div>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={foodCategoriesData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="value"
+                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      >
+                        {foodCategoriesData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
             </div>
