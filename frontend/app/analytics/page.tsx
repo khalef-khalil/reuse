@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import MainLayout from '../../components/layout/MainLayout';
 import Button from '../../components/ui/Button';
 import React from 'react';
+import Link from 'next/link';
 import {
   AreaChart, Area, BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
@@ -505,26 +506,35 @@ export default function AnalyticsDashboard() {
   return (
     <MainLayout>
       <div className="container-custom py-8">
-        {/* Header */}
-        <motion.div 
-          className="mb-8"
+        <div className="mb-6">
+          <Link href="/business" className="flex items-center text-primary hover:underline">
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Business Dashboard
+          </Link>
+        </div>
+      
+        <motion.h1 
+          className="text-3xl font-bold mb-2"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-3xl font-bold mb-2">Analytics & Impact Dashboard</h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Track your environmental impact and business metrics in real-time
-          </p>
-        </motion.div>
+          Analytics Dashboard
+        </motion.h1>
         
-        {/* Timeframe selector */}
+        <motion.p 
+          className="text-gray-600 dark:text-gray-300 mb-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          Track your environmental impact and business performance
+        </motion.p>
+        
         {renderTimeframeSelector()}
-        
-        {/* Tab selector */}
         {renderTabSelector()}
-        
-        {/* Tab content */}
         {renderTabContent()}
       </div>
     </MainLayout>

@@ -49,13 +49,8 @@ export default function Navbar() {
               </Link>
             </motion.div>
             <motion.div whileHover="hover" variants={navItemVariants}>
-              <Link href="/business" className="hover:text-primary transition-colors">
-                Business Dashboard
-              </Link>
-            </motion.div>
-            <motion.div whileHover="hover" variants={navItemVariants}>
               <Link href="/food" className="hover:text-primary transition-colors">
-                Food Waste
+                REUSE Food
               </Link>
             </motion.div>
             <motion.div whileHover="hover" variants={navItemVariants}>
@@ -63,42 +58,13 @@ export default function Navbar() {
                 REUSE Label
               </Link>
             </motion.div>
-            <motion.div whileHover="hover" variants={navItemVariants}>
-              <Link href="/analytics" className="hover:text-primary transition-colors">
-                Analytics
-              </Link>
-            </motion.div>
-            <motion.div whileHover="hover" variants={navItemVariants}>
-              <Link href="/about" className="hover:text-primary transition-colors">
-                About
-              </Link>
-            </motion.div>
-            
-            {/* Messages Link with notification dot */}
-            <motion.div
-              whileHover="hover"
-              variants={navItemVariants}
-              className="relative"
-            >
-              <Link href="/messages" className="hover:text-primary transition-colors flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                </svg>
-                Messages
-                {hasUnreadMessages && (
-                  <span className="absolute -top-1 -right-2 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
-                    <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                  </span>
-                )}
-              </Link>
-            </motion.div>
             
             <motion.div 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Link href="/auth/login" className="btn-primary">
-                Sign In
+              <Link href="/business" className="btn-primary">
+                Business Dashboard
               </Link>
             </motion.div>
           </div>
@@ -136,16 +102,8 @@ export default function Navbar() {
               whileHover={{ x: 5 }}
               transition={{ duration: 0.2 }}
             >
-              <Link href="/business" className="block hover:text-primary transition-colors">
-                Business Dashboard
-              </Link>
-            </motion.div>
-            <motion.div 
-              whileHover={{ x: 5 }}
-              transition={{ duration: 0.2 }}
-            >
               <Link href="/food" className="block hover:text-primary transition-colors">
-                Food Waste
+                REUSE Food
               </Link>
             </motion.div>
             <motion.div 
@@ -156,48 +114,13 @@ export default function Navbar() {
                 REUSE Label
               </Link>
             </motion.div>
-            <motion.div 
-              whileHover={{ x: 5 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Link href="/analytics" className="block hover:text-primary transition-colors">
-                Analytics
-              </Link>
-            </motion.div>
-            <motion.div 
-              whileHover={{ x: 5 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Link href="/about" className="block hover:text-primary transition-colors">
-                About
-              </Link>
-            </motion.div>
-            
-            {/* Mobile Messages Link */}
-            <motion.div 
-              whileHover={{ x: 5 }}
-              transition={{ duration: 0.2 }}
-              className="relative"
-            >
-              <Link href="/messages" className="block hover:text-primary transition-colors flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                </svg>
-                Messages
-                {hasUnreadMessages && (
-                  <span className="ml-2 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center">
-                    <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                  </span>
-                )}
-              </Link>
-            </motion.div>
             
             <motion.div 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Link href="/auth/login" className="block btn-primary inline-block mt-2">
-                Sign In
+              <Link href="/business" className="block btn-primary inline-block mt-2">
+                Business Dashboard
               </Link>
             </motion.div>
           </motion.div>
