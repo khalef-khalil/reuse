@@ -11,12 +11,6 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
 
-// Types
-interface ChartData {
-  label: string;
-  value: number;
-}
-
 export default function AnalyticsDashboard() {
   const [timeframe, setTimeframe] = useState<'week' | 'month' | 'year'>('month');
   const [activeTab, setActiveTab] = useState<'overview' | 'impact' | 'business' | 'food'>('overview');

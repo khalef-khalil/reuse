@@ -7,7 +7,6 @@ import { motion } from 'framer-motion';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [hasUnreadMessages] = useState(true); // In a real app, this would come from a context or API
 
   const navItemVariants = {
     hover: { 

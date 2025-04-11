@@ -1,10 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import MainLayout from '../../components/layout/MainLayout';
-import Button from '../../components/ui/Button';
-import Image from 'next/image';
 import Link from 'next/link';
 
 // Mock conversation data
@@ -198,17 +196,18 @@ export default function MessagesPage() {
   // Handle sending a new message
   const handleSendMessage = () => {
     if (messageText.trim() && selectedConversation) {
+      const newId = `m${Date.now()}`;
       const newMessage = {
-        id: `m${Date.now()}`,
+        id: newId,
         senderId: 'current-user',
         text: messageText,
         timestamp: new Date().toISOString(),
       };
       
-      // Update messages
-      setMessages(prev => [...prev, newMessage]);
+      // Add to messages state
+      setMessages(prevMessages => [...prevMessages, newMessage]);
       
-      // Update last message in conversation list
+      // Update conversation
       setConversations(prevConversations => 
         prevConversations.map(conv => 
           conv.id === selectedConversation 
@@ -223,37 +222,6 @@ export default function MessagesPage() {
       
       // Clear input
       setMessageText('');
-    }
-  };
-  
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1,
-      transition: { duration: 0.3 }
-    }
-  };
-  
-  const listItemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.3 }
-    },
-    hover: {
-      backgroundColor: 'rgba(59, 130, 246, 0.1)',
-      transition: { duration: 0.2 }
-    }
-  };
-  
-  const messageVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.2 }
     }
   };
   

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import MainLayout from '../../components/layout/MainLayout';
 import Button from '../../components/ui/Button';
@@ -36,7 +37,7 @@ const mockListings = [
   {
     id: 'p1',
     title: 'Office Desks (Set of 4)',
-    image: '/images/placeholder.png',
+    image: '/images/marketplace/office-desks.jpg',
     price: 1200,
     condition: 'Good',
     category: 'Furniture',
@@ -48,7 +49,7 @@ const mockListings = [
   {
     id: 'p2',
     title: 'Dell OptiPlex Desktops',
-    image: '/images/placeholder.png',
+    image: '/images/marketplace/dell-desktops.jpg',
     price: 2500,
     condition: 'Excellent',
     category: 'Electronics',
@@ -60,13 +61,49 @@ const mockListings = [
   {
     id: 'p3',
     title: 'Conference Room Chairs',
-    image: '/images/placeholder.png',
+    image: '/images/marketplace/conference-chairs.jpg',
     price: 800,
     condition: 'Fair',
     category: 'Furniture',
     quantity: 12,
     description: 'Ergonomic conference room chairs. Some wear but still functional.',
     createdAt: '2023-12-05',
+    status: 'active',
+  },
+  {
+    id: 'p4',
+    title: 'Acer Projector',
+    image: '/images/marketplace/acer-projector.jpg',
+    price: 350,
+    condition: 'Excellent',
+    category: 'Electronics',
+    quantity: 1,
+    description: 'Acer XL1220 projector with 3000 lumens brightness, barely used with all accessories.',
+    createdAt: '2024-01-10',
+    status: 'active',
+  },
+  {
+    id: 'p5',
+    title: 'MacBook Pro 2022',
+    image: '/images/marketplace/macbook-pro.jpg',
+    price: 1800,
+    condition: 'Like New',
+    category: 'Electronics',
+    quantity: 2,
+    description: 'M1 Pro MacBook Pro, purchased in 2022. 16GB RAM, 512GB storage. Excellent condition.',
+    createdAt: '2024-02-15',
+    status: 'active',
+  },
+  {
+    id: 'p6',
+    title: 'HP LaserJet Printer',
+    image: '/images/marketplace/hp-printer.jpg',
+    price: 450,
+    condition: 'Good',
+    category: 'Electronics',
+    quantity: 1,
+    description: 'HP LaserJet Pro MFP multifunction printer. Comes with extra toner cartridges.',
+    createdAt: '2024-03-01',
     status: 'active',
   },
 ];
@@ -254,8 +291,14 @@ export default function BusinessDashboard() {
                   className="bg-white dark:bg-neutral-dark rounded-lg shadow-md overflow-hidden"
                   whileHover={{ y: -5, boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)" }}
                 >
-                  <div className="h-40 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                    <div className="text-gray-400">Product Image</div>
+                  <div className="h-40 bg-gray-200 dark:bg-gray-700 relative overflow-hidden">
+                    <Image 
+                      src={listing.image} 
+                      alt={listing.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-300 hover:scale-105"
+                    />
                   </div>
                   <div className="p-4">
                     <h4 className="font-semibold text-lg mb-1">{listing.title}</h4>
