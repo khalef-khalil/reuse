@@ -15,7 +15,7 @@ const allListings = [
   {
     id: 'p1',
     title: 'Office Desks (Set of 4)',
-    image: '/images/placeholder.png',
+    image: '/images/marketplace/office-desks.jpg',
     price: 1200,
     condition: 'Good',
     category: 'Furniture',
@@ -44,7 +44,7 @@ const allListings = [
   {
     id: 'p2',
     title: 'Dell OptiPlex Desktops',
-    image: '/images/placeholder.png',
+    image: '/images/marketplace/dell-desktops.jpg',
     price: 2500,
     condition: 'Excellent',
     category: 'Electronics',
@@ -74,7 +74,7 @@ const allListings = [
   {
     id: 'p3',
     title: 'Conference Room Chairs',
-    image: '/images/placeholder.png',
+    image: '/images/marketplace/conference-chairs.jpg',
     price: 800,
     condition: 'Fair',
     category: 'Furniture',
@@ -103,7 +103,7 @@ const allListings = [
   {
     id: 'p4',
     title: 'HP Color LaserJet Printer',
-    image: '/images/placeholder.png',
+    image: '/images/marketplace/hp-printer.jpg',
     price: 350,
     condition: 'Good',
     category: 'Electronics',
@@ -451,8 +451,14 @@ export default function ProductDetail() {
                       onClick={() => router.push(`/marketplace/${item.id}`)}
                     >
                       <div className="flex space-x-3">
-                        <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded flex items-center justify-center flex-shrink-0">
-                          <span className="text-xs text-gray-400">Image</span>
+                        <div className="w-16 h-16 relative flex-shrink-0 rounded overflow-hidden">
+                          <Image 
+                            src={item.image}
+                            alt={item.title}
+                            fill
+                            sizes="64px"
+                            style={{ objectFit: 'cover' }}
+                          />
                         </div>
                         <div className="flex-1 min-w-0">
                           <h4 className="font-medium text-sm truncate">{item.title}</h4>
